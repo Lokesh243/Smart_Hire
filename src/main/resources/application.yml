@@ -1,0 +1,73 @@
+spring:
+
+  profiles:
+    active: dev
+
+  application:
+    name: smarthire
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/smarthire_db}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:LokeshGajangi123@}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 20000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gajangilokesh@gmail.com
+    password: hexzoyyzpgrohxtq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+
+jwt:
+  secret: ${JWT_SECRET:smarthire_super_secret_key_minimum_256_bits_long_for_hs256}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY:your-key-goes-in-env-only}
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+  packages-to-scan: com.smarthire
+
+logging:
+  level:
+    com.smarthire: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG

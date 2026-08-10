@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/smarthire_db
+    username: root
+    password: LokeshGajangi123@
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    com.smarthire: DEBUG
+    org.springframework.security: DEBUG
