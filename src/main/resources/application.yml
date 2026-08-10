@@ -1,5 +1,4 @@
 spring:
-
   profiles:
     active: dev
 
@@ -9,7 +8,7 @@ spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/smarthire_db}
     username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:LokeshGajangi123@}
+    password: ${SPRING_DATASOURCE_PASSWORD:your-password-here}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -27,8 +26,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: gajangilokesh@gmail.com
-    password: hexzoyyzpgrohxtq
+    username: ${MAIL_USERNAME:your-email@example.com}
+    password: ${MAIL_PASSWORD:your-app-password-here}
     properties:
       mail:
         smtp:
@@ -49,7 +48,7 @@ server:
     include-stacktrace: always
 
 jwt:
-  secret: ${JWT_SECRET:smarthire_super_secret_key_minimum_256_bits_long_for_hs256}
+  secret: ${JWT_SECRET:change-me-in-env-min-256-bits}
   expiration: ${JWT_EXPIRATION:86400000}
   refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
 
