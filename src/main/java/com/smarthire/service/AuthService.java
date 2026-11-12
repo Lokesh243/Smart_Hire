@@ -5,6 +5,7 @@ import com.smarthire.dto.request.RegisterRequest;
 import com.smarthire.dto.response.AuthResponse;
 import com.smarthire.entity.User;
 import com.smarthire.exception.ResourceNotFoundException;
+import com.smarthire.exception.UnauthorizedException;
 import com.smarthire.repository.UserRepository;
 import com.smarthire.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,7 @@ public class AuthService {
                 .build();
     }
 
+
     // ── Login ──────────────────────────────────────────────────────
     public AuthResponse login(LoginRequest request) {
 
@@ -104,4 +106,43 @@ public class AuthService {
                         new ResourceNotFoundException(
                                 "User not found: " + email));
     }
+    // ── Refresh Token ──────────────────────────────────────────────
+public AuthResponse refreshToken(String refreshToken) {
+
+    // 1. extract email (also verifies signature internally)
+    String email;
+    try {
+        email = jwtUtil.extractEmail(refreshToken);
+    } catch (Exception e) {
+        throw new UnauthorizedException("Invalid refresh token");
+    }
+
+    // 2. check not expired + email matches
+    if (!jwtUtil.isTokenValid(refreshToken, email)) {
+        throw new UnauthorizedException("Refresh token expired or invalid");
+    }
+
+    // 3. load user from DB
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found: " + email));
+
+    // 4. issue a brand new access token
+    String newAccessToken = jwtUtil.generateToken(
+            user.getEmail(),
+            user.getRole(),
+            user.getId());
+
+    log.info("Access token refreshed for user: {}", email);
+
+    return AuthResponse.builder()
+            .accessToken(newAccessToken)
+            .refreshToken(refreshToken)   // same refresh token, not rotated
+            .tokenType("Bearer")
+            .userId(user.getId())
+            .fullName(user.getFullName())
+            .email(user.getEmail())
+            .role(user.getRole())
+            .build();
+}
+
 }

@@ -34,7 +34,7 @@ public class JwtUtil {
             return buildToken(claims, email, expiration);
         }
 
-    // ── Generate refresh token ─────────────────────────────────────
+    // ── Generate refresh token ────────────────────────────────────────
     public String generateRefreshToken(String email) {
         return buildToken(new HashMap<>(), email, refreshExpiration);
     }

@@ -61,10 +61,12 @@ public class JobService {
                                         Pageable pageable) {
 
         Specification<Job> spec = Specification
-                .where(hasStatus(JobStatus.OPEN))
-                .and(hasTitle(title))
-                .and(hasLocation(location))
-                .and(hasJobType(jobType));
+                .allOf(
+                        hasStatus(JobStatus.OPEN),
+                        hasTitle(title),
+                        hasLocation(location),
+                        hasJobType(jobType)
+                );
 
         return jobRepository.findAll(spec, pageable)
                 .map(this::mapToResponse);
